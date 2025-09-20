@@ -32,6 +32,6 @@ All core components are located in the same folder:
 
 Notes
 
-Keep pipeline/, empty.csv, and gradio_ui.py in the same folder for smooth execution.
+Keep pipeline/, empty.csv, and gradio UIs in the same folder for smooth execution.
 
 This project is intended for educational and research purposes.
