@@ -21,7 +21,7 @@ All core components are located in the same folder:
 ## Usage
 1. Clone this repo:
    ```bash
-   git clone https://github.com/YourUsername/los-classification-pipeline.git
+   git clone https://github.com/rukshan1015/los-classification-pipeline.git
    cd los-classification-pipeline
 2. ```bash
    pip install -r requirements.txt
