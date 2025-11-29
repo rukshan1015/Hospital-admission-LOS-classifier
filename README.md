@@ -35,7 +35,7 @@ All core components are located in the same folder:
    ```bash
    python local_UIs\batch.py  # For batch inferecing 
    python local_UIs\single_inference.py  #For individual predictions
-
+   ```
    FastAPI
    ```bash
    fastapi dev app\main.py  # Endpoint deployement
