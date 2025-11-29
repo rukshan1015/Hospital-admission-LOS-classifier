@@ -7,9 +7,13 @@ The model classifies patients into two groups:
 
 ## Project Structure
 All core components are located in the same folder:
-- **`pipeline/`** → preprocessing, feature engineering, and model training scripts  
-- **`empty.csv`** → template CSV for batch inference (users can fill with their own data)  
-- **`gradio_ui.py`** → interactive Gradio interface for single-patient and batch predictions  
+- **`data/`** → choices.json (values of each attribute), sampledata.csv, empty.csv (to provide a template)  
+- **`app`** → FastAPI - main.py, model.py, shap.py (for feature importance)  
+- **`ml`** → Training scripts - LOSClassier.py 
+- **`models`**→ End-to-end pipeline - LOS_classifier_pipeline.joblib
+- **`fastapi_UIs`** → FastAPI gradio UI scripts - fastapi_batch.py, fastapi_single_inference.py
+- **`local_UIs`** → Local gradio UI scripts - batch.py, single_inference.py
+
 
 ## Features
 - Full ML pipeline (data processing → training → evaluation → inference)  
@@ -21,17 +25,25 @@ All core components are located in the same folder:
 ## Usage
 1. Clone this repo:
    ```bash
-   git clone https://github.com/rukshan1015/los-classification-pipeline.git
-   cd los-classification-pipeline
+   git clone https://github.com/rukshan1015/Hospital-admission-LOS-classifier.git
+   cd Hospital-admission-LOS-classifier.git
 2. ```bash
    pip install -r requirements.txt
 3. Inferencing
+
+   local inferencing
    ```bash
-   python LOSgradio_batch.py  # For batch inferecing 
-   python LOSgradio_single_inference.py  #For individual predictions
+   python local_UIs\batch.py  # For batch inferecing 
+   python local_UIs\single_inference.py  #For individual predictions
+
+   FastAPI
+   ```bash
+   fastapi dev app\main.py  # Endpoint deployement
+   ```
+   Run Fastapi UIs (located in fastapi_UIs) from any folder
+
 
 Notes
 
-Keep pipeline/, empty.csv, and gradio UIs in the same folder for smooth execution.
 
 This project is intended for educational and research purposes.
