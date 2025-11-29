@@ -1,47 +1,46 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
 
 
 import pandas as pd
 import numpy as np
 import gradio as gr
-import joblib
-from LOSclassifier import DataCleanerClassifier
+import requests
 
 
-# In[2]:
 
+API_BASE = "http://127.0.0.1:8000"  # FastAPI server base URL
 
 def batchinference(input_file):
-    
-    model_pipeline = joblib.load("LOS_classifier_pipeline.joblib")
-    
+    # Read locally ti attach predictions & save a CSV to download
     df = pd.read_csv(input_file.name)
-    X, _ = DataCleanerClassifier(df)
-    
-    y_pred = model_pipeline.predict(X)
-    y_pred = pd.Series(y_pred).replace({1: "0-2 days", 0: "2+ days"})
 
-    y_probs = model_pipeline.predict_proba(X)
-    
-    confidence = []
-    for i, pred in enumerate(y_pred):
-        class_index = 1 if pred == "0-2 days" else 0
-        confidence.append(round(y_probs[i][class_index], 4))
-    
+    # Send the uploaded file to FastAPI /predict_csv
+    files = {"file": (input_file.name, open(input_file.name, "rb"), "text/csv")}
+    r = requests.post(f"{API_BASE}/predict_csv", files=files, timeout=60)
+    r.raise_for_status()
+    data = r.json()  # {"threshold": ..., "proba_positive": [...], "label_int": [...]}
+
+    # Convert API outputs
+    p_pos = pd.Series(data["proba_positive"])
+    y_int = pd.Series(data["label_int"])
+
+    # Confidence = probability of the predicted class
+    confidence = np.where(y_int == 1, p_pos, 1.0 - p_pos)
+    confidence = np.round(confidence.astype(float), 4)
+
+    # Map 1/0 to "0-2 days" and "2+ days
+    label_map = {1: "0-2 days", 0: "2+ days"}
+    labels_text = y_int.map(label_map)
+
     df_out = df.copy()
-    df_out["Predicted LOS"] = y_pred
+    df_out["Predicted LOS"] = labels_text
     df_out["Confidence"] = confidence
 
     out_path = "los_predictions_output.csv"
     df_out.to_csv(out_path, index=False)
-    
     return out_path
 
 
-# ✨ Flashy Gradio UI
+# ✨ Gradio UI
 with gr.Blocks(theme=gr.themes.Soft(), css=".gr-button {background-color: #1f6feb !important; color: white;}") as demo:
 
     gr.Markdown(

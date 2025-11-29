@@ -1,25 +1,37 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
 
 
 import gradio as gr
 import pandas as pd
 import joblib
-from LOSclassifier import DataCleanerClassifier
 import os
 from datetime import datetime
+from pathlib import Path
+import sys
+
+# making project root importable 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ml.LOSclassifier import DataCleanerClassifier
+
+
+#MODEL_PATH = Path(os.getenv("MODEL_PATH", str(ROOT / "models" / "LOS_classifier_pipeline.joblib")))
+#DATA_PATH  = Path(os.getenv("DATA_PATH",  str(ROOT / "data"   / "sampledata.csv")))
+
+
+MODEL_PATH = Path(os.getenv("MODEL_PATH", "models/LOS_classifier_pipeline.joblib"))
+DATA_PATH  = Path(os.getenv("DATA_PATH",  "data/sampledata.csv"))
 
 # Extracting feature names
-df_original = pd.read_csv(r"C:\Users\ruksh\Desktop\AIagents\llm_engineering\data\nylos2023_500k.csv")
+df_original = pd.read_csv(DATA_PATH, low_memory=False)
 X_original, _ = DataCleanerClassifier(df_original)
 prediction_log = []
 
 # Prediction function for single prediction
 def single_prediction(*args):
     
-    model_pipeline = joblib.load("LOS_classifier_pipeline.joblib")
+    model_pipeline = joblib.load(MODEL_PATH)
     
     feature_names = [
         'age_group', 'gender', 'race', 'ethnicity', 'type_of_admission', 'ccsr_diagnosis_description',
