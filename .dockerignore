@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.git/
+.gradio/
+*.log
+.DS_Store
+notebooks/
+fast_ui/
+

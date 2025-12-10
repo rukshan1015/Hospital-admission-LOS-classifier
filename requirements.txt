@@ -1,10 +1,14 @@
+--index-url https://pypi.org/simple  # To avoid CUDA installation
+
+scikit-optimize
 pandas
 numpy
-sklearn
-scikit-optimize
-os
-fastapi
+scikit-learn
+scipy
 xgboost
+shap
 gradio
-pathlib
 pydantic
+requests
+joblib
+matplotlib

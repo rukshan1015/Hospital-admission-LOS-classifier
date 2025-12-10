@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# In[1]:
 
 
 import gradio as gr
@@ -97,7 +94,7 @@ def download_log():
     return file_path
 
 # Gradio UI 
-with gr.Blocks() as demo:
+with gr.Blocks() as single_demo:
     gr.Markdown("## 🏥 Dynamic Patient Input — LOS Classifier")
 
     with gr.Row():
@@ -159,5 +156,6 @@ with gr.Blocks() as demo:
         outputs=[download_file]
     )
 
-demo.launch(share=True)
+if __name__ == "__main__":
+    single_demo.launch(server_name="0.0.0.0", server_port=7860)
 

@@ -8,6 +8,12 @@ from fastapi.staticfiles import StaticFiles
 from app.model import get_model, predict_rows
 from app.shap import feature_importance
 
+## Only if you mount UIs
+#from fastapi.responses import RedirectResponse
+#from gradio.routes import mount_gradio_app
+#from fast_ui.fastapi_single_inference import single_demo
+#from fast_ui.fastapi_batch import batch_demo
+
 app = FastAPI(
     title="LOS Classifier API",
     version="0.1.0",
@@ -30,6 +36,10 @@ def list_data():
 """
 
 app.mount("/static", StaticFiles(directory=str(DATA_DIR)), name="static")
+
+# mounting each UI under its own path
+#app = mount_gradio_app(app, single_demo, path = "/ui/single")
+#app = mount_gradio_app(app, batch_demo,  path = "/ui/batch")
 
 @app.get("/healthz")
 
@@ -71,10 +81,14 @@ def get_shap(req: PredictRequest):
         return {"html": html}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+#@app.get("/")  # home page (/) automatically jump to Single UI
+#def root():
+#    return RedirectResponse(url="/ui/single")
 
 
 """
 set PYTHONPATH=.
-fastapi dev app\main.py  #Once you are in the project folder
+fastapi dev app\main.py  
 
 """

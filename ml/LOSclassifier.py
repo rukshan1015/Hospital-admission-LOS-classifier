@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
 
 
 import pandas as pd
@@ -88,7 +84,7 @@ def preprocessing():
         
     # Step 1. Load and clean data
     
-    df = pd.read_csv(r"C:\Users\ruksh\Desktop\AIagents\llm_engineering\data\nylos2023_500k.csv")
+    df = pd.read_csv(r"LOCAL PATH TO CSV FILE")
     X, y = DataCleanerClassifier(df)
     
     # Split data
@@ -155,7 +151,7 @@ def pipeline (ct, X_train, X_test, y_train, y_test):
     opt = BayesSearchCV(
         pipeline_clf,
         search_spaces,
-        n_iter=25,  # increase if time allows
+        n_iter=25,  # increase if time allows (but keep 25 minimum)
         cv=3,
         scoring="accuracy",
         n_jobs=-1,
